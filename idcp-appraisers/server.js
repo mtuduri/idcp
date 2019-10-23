@@ -39,7 +39,7 @@ function handleError(res, reason, message, code) {
 
 /*  "/api/questions"
  *    GET: finds all questions
- *    POST: creates a new contact
+ *    POST: creates a new question
  */
 
 app.get("/api/questions", function(req, res) {
@@ -61,7 +61,7 @@ app.post("/api/questions", function(req, res) {
   } else {
     db.collection(QUESTIONS_COLLECTION).insertOne(newContact, function(err, doc) {
       if (err) {
-        handleError(res, err.message, "Failed to create new contact.");
+        handleError(res, err.message, "Failed to create new question.");
       } else {
         res.status(201).json(doc.ops[0]);
       }
@@ -70,15 +70,15 @@ app.post("/api/questions", function(req, res) {
 });
 
 /*  "/api/questions/:id"
- *    GET: find contact by id
- *    PUT: update contact by id
- *    DELETE: deletes contact by id
+ *    GET: find question by id
+ *    PUT: update question by id
+ *    DELETE: deletes question by id
  */
 
 app.get("/api/questions/:id", function(req, res) {
   db.collection(QUESTIONS_COLLECTION).findOne({ _id: new ObjectID(req.params.id) }, function(err, doc) {
     if (err) {
-      handleError(res, err.message, "Failed to get contact");
+      handleError(res, err.message, "Failed to get question");
     } else {
       res.status(200).json(doc);
     }
@@ -91,7 +91,7 @@ app.put("/api/questions/:id", function(req, res) {
 
   db.collection(QUESTIONS_COLLECTION).updateOne({_id: new ObjectID(req.params.id)}, updateDoc, function(err, doc) {
     if (err) {
-      handleError(res, err.message, "Failed to update contact");
+      handleError(res, err.message, "Failed to update question");
     } else {
       updateDoc._id = req.params.id;
       res.status(200).json(updateDoc);
@@ -102,7 +102,7 @@ app.put("/api/questions/:id", function(req, res) {
 app.delete("/api/questions/:id", function(req, res) {
   db.collection(QUESTIONS_COLLECTION).deleteOne({_id: new ObjectID(req.params.id)}, function(err, result) {
     if (err) {
-      handleError(res, err.message, "Failed to delete contact");
+      handleError(res, err.message, "Failed to delete question");
     } else {
       res.status(200).json(req.params.id);
     }
