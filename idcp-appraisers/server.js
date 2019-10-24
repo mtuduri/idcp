@@ -53,13 +53,13 @@ app.get("/api/questions", function(req, res) {
 });
 
 app.post("/api/questions", function(req, res) {
-  var newContact = req.body;
-  newContact.createDate = new Date();
+  var newQuestion = req.body;
+  newQuestion.createDate = new Date();
 
-  if (!req.body.name) {
-    handleError(res, "Invalid user input", "Must provide a name.", 400);
+  if (!req.body.primary_question) {
+    handleError(res, "Invalid user input", "Must provide a primary question.", 400);
   } else {
-    db.collection(QUESTIONS_COLLECTION).insertOne(newContact, function(err, doc) {
+    db.collection(QUESTIONS_COLLECTION).insertOne(newQuestion, function(err, doc) {
       if (err) {
         handleError(res, err.message, "Failed to create new question.");
       } else {
