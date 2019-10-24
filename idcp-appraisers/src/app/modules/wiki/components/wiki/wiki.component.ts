@@ -22,7 +22,7 @@ export class WikiComponent implements OnInit {
   public fields: FormlyFieldConfig[] = [];
   public questions$: Observable<Issue[]>;
   constructor(private builder: FormlyFormBuilder, private questionService: QuestionService, private carInfoService: CarInfoService) {
-    this.displayedColumns = ['title', 'description', 'conditions'];
+    this.displayedColumns = ['title', 'description', 'brand', 'conditions'];
     this.builder.buildForm(this.form, this.fields, this.model, this.options);
   }
 
@@ -91,11 +91,51 @@ export class WikiComponent implements OnInit {
             }
           },
           {
+            key: 'year',
+            className: 'split-from',
+            fieldGroup: [
+              {
+                type: 'input',
+                key: 'year',
+                templateOptions: {
+                  label: 'Year',
+                  placeholder: 'Year',
+                  description: 'Year',
+                  required: true,
+                  min: 0
+                },
+                validators: {
+                  validation: Validators.compose([Validators.required,
+                    Validators.pattern('^[0-9]+$')])
+                }
+              },
+              {
+                type: 'select',
+                key: 'operator',
+                templateOptions: {
+                  label: 'Operator',
+                  placeholder: 'Operator',
+                  description: 'Operator',
+                  options: [
+                    {symbol: '<'},
+                    {symbol: '<='},
+                    {symbol: '>'},
+                    {symbol: '>='},
+                    {symbol: '!='},
+                  ],
+                  valueProp: 'symbol',
+                  labelProp: 'symbol',
+                  required: true
+                }
+              }
+            ]
+          },
+          {
             key: 'miles',
             fieldGroup: [
               {
                 type: 'input',
-                key: 'miles',
+                key: 'value',
                 templateOptions: {
                   label: 'Miles',
                   placeholder: 'Miles',
@@ -106,6 +146,25 @@ export class WikiComponent implements OnInit {
                 validators: {
                   validation: Validators.compose([Validators.required,
                     Validators.pattern('^[0-9]+$')])
+                }
+              },
+              {
+                type: 'select',
+                key: 'operator',
+                templateOptions: {
+                  label: 'Operator',
+                  placeholder: 'Operator',
+                  description: 'Operator',
+                  options: [
+                    {symbol: '<'},
+                    {symbol: '<='},
+                    {symbol: '>'},
+                    {symbol: '>='},
+                    {symbol: '!='},
+                  ],
+                  valueProp: 'symbol',
+                  labelProp: 'symbol',
+                  required: true
                 }
               }
             ]
@@ -121,7 +180,6 @@ export class WikiComponent implements OnInit {
   }
 
   addQuestion() {
-    console.log(this.model);
     if (this.model) {
       this.addFlag = false;
     }
