@@ -20,7 +20,10 @@ import { WikiAbmComponent } from './components/wiki-abm/wiki-abm.component';
     FormsModule,
     ReactiveFormsModule,
     MyNgxFormlyModule,
-    RouterModule.forChild([{path: '', component: WikiComponent}])
+    RouterModule.forChild([{path: '', component: WikiComponent, children: [
+      {path: '', component: WikiListComponent},
+      {path: 'abm', component: WikiAbmComponent}
+    ]}])
   ]
 })
 export class WikiModule { }

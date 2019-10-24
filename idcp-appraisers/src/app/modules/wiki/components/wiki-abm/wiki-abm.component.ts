@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormlyFormOptions, FormlyFieldConfig, FormlyFormBuilder } from '@ngx-formly/core';
 import { FormGroup, Validators } from '@angular/forms';
-import { QuestionService } from 'src/app/shared/services/question.service';
-import { Question, Issue } from 'src/app/shared/models/issue';
-import { Observable, of } from 'rxjs';
 import { map, startWith, tap, first, flatMap } from 'rxjs/operators';
 import { CarInfoService } from 'src/app/shared/services/car-info.service';
 
@@ -29,6 +26,7 @@ export class WikiAbmComponent implements OnInit {
   setUpFormlyForm(): void {
     this.fields = [
       {
+        className: 'grid-formly-row',
         key: 'issue_title',
         type: 'input',
         templateOptions: {
@@ -38,6 +36,7 @@ export class WikiAbmComponent implements OnInit {
         }
       },
       {
+        className: 'grid-formly-row',
         key: 'issue_description',
         type: 'textarea',
         templateOptions: {
@@ -48,6 +47,7 @@ export class WikiAbmComponent implements OnInit {
       },
       {
         key: 'issue_conditions',
+        className: 'grid-formly-row',
         fieldGroup: [
           {
             type: 'select',
@@ -55,7 +55,6 @@ export class WikiAbmComponent implements OnInit {
             templateOptions: {
               label: 'Brand',
               placeholder: 'Brand',
-              description: 'Brand',
               options: this.carInfoService.getBrands(),
               valueProp: 'brand',
               labelProp: 'brand',
@@ -63,12 +62,12 @@ export class WikiAbmComponent implements OnInit {
             }
           },
           {
+            className: 'grid-formly-row',
             type: 'select',
             key: 'model',
             templateOptions: {
               label: 'Model',
               placeholder: 'Model',
-              description: 'Model',
               options: [],
               valueProp: 'model',
               labelProp: 'model',
@@ -86,8 +85,9 @@ export class WikiAbmComponent implements OnInit {
             }
           },
           {
+            className: 'grid-formly-row',
             key: 'year',
-            className: 'split-from',
+            fieldGroupClassName: 'split-form',
             fieldGroup: [
               {
                 type: 'input',
@@ -95,7 +95,6 @@ export class WikiAbmComponent implements OnInit {
                 templateOptions: {
                   label: 'Year',
                   placeholder: 'Year',
-                  description: 'Year',
                   required: true,
                   min: 0
                 },
@@ -110,7 +109,6 @@ export class WikiAbmComponent implements OnInit {
                 templateOptions: {
                   label: 'Operator',
                   placeholder: 'Operator',
-                  description: 'Operator',
                   options: [
                     {symbol: '<'},
                     {symbol: '<='},
@@ -127,6 +125,8 @@ export class WikiAbmComponent implements OnInit {
           },
           {
             key: 'miles',
+            className: 'grid-formly-row',
+            fieldGroupClassName: 'split-form',
             fieldGroup: [
               {
                 type: 'input',
@@ -134,7 +134,6 @@ export class WikiAbmComponent implements OnInit {
                 templateOptions: {
                   label: 'Miles',
                   placeholder: 'Miles',
-                  description: 'Miles',
                   required: true,
                   min: 0
                 },
@@ -149,7 +148,6 @@ export class WikiAbmComponent implements OnInit {
                 templateOptions: {
                   label: 'Operator',
                   placeholder: 'Operator',
-                  description: 'Operator',
                   options: [
                     {symbol: '<'},
                     {symbol: '<='},

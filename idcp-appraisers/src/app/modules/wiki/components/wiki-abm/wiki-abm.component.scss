@@ -1,0 +1,20 @@
+.no-display{
+    display: none;
+}
+
+::ng-deep .grid-formly .grid-formly-row > formly-wrapper-mat-form-field > mat-form-field  {
+    margin-bottom: 10px;
+}
+
+::ng-deep .grid-formly .split-form{
+    display: flex;
+    flex-direction: row;   
+}
+
+::ng-deep .grid-formly .split-form > * {
+    flex: 1 100%;
+    margin-right: 10px;
+}
+::ng-deep .grid-formly .split-form > *:last-child {
+    margin-right: 0px;
+}

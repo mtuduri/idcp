@@ -1,6 +1,7 @@
 <button mat-mini-fab color="primary" (click)="this.addFlag = !this.addFlag" *ngIf="!this.addFlag">
     <mat-icon>add</mat-icon>
 </button>
+<app-wiki-list [class.no-display]="this.addFlag"></app-wiki-list>
 <div class="form-container" *ngIf="this.addFlag">
     <form [formGroup]="this.form">
         <formly-form class="grid-formly" [model]="this.model" [fields]="this.fields" [options]="this.options"
