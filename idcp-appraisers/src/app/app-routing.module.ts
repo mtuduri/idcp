@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 
 const routes: Routes = [
+  { path: '', redirectTo: '/wiki', pathMatch: 'full'},
   { path: 'wiki',  loadChildren: () => import('./modules/wiki/wiki.module').then(mod => mod.WikiModule)}
 ];
 

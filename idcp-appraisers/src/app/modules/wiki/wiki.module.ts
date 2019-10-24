@@ -7,9 +7,11 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
+import { WikiListComponent } from './components/wiki-list/wiki-list.component';
+import { WikiAbmComponent } from './components/wiki-abm/wiki-abm.component';
 
 @NgModule({
-  declarations: [WikiComponent],
+  declarations: [WikiComponent, WikiListComponent, WikiAbmComponent],
   imports: [
     CommonModule,
     MatTableModule,
