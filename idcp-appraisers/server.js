@@ -85,6 +85,57 @@ app.get("/api/questions/:id", function (req, res) {
   });
 });
 
+app.get("/api/dcp", function (req, res) {
+  const query = req.query;
+  const miles = query.miles;
+  const brand = query.brand;
+  const model = query.model;
+  if (!brand && !model) {
+    handleError(res, "Invalid user input", "Must provide a brand and model.", 400);
+  }
+  var comparator_func = function (operator, val1, val2) {
+    try {
+      switch (operator) {
+        case "=":
+          return parseInt(val1, 10) === parseInt(val2, 10);
+        case "<":
+          return parseInt(val2, 10) < parseInt(val1, 10);
+        case "<=":
+          return parseInt(val2, 10) <= parseInt(val1, 10);
+        case ">":
+          return parseInt(val2, 10) > parseInt(val1, 10);
+        case ">=":
+          return parseInt(val2, 10) >= parseInt(val1, 10);
+        case "!=":
+          return parseInt(val1, 10) < parseInt(val2, 10);
+      }
+    }
+    catch (err) {
+      handleError(res, "comparator_func", err, 400);
+    }
+  };
+  db.collection(QUESTIONS_COLLECTION).find({
+    "issue_conditions.brand": brand,
+    "issue_conditions.model": model
+  }).toArray(function (err, doc) {
+    if (err) {
+      handleError(res, err.message, "Failed to get question");
+    } else {
+      if (doc && Array.isArray(doc) && miles) {
+        var questions = doc.reduce(function (filtered, i) {
+          if (i.issue_conditions && i.issue_conditions.miles &&
+            comparator_func(i.issue_conditions.miles.operator, i.issue_conditions.miles.value, miles)) {
+            filtered.push(i.question);
+          }
+          return filtered;
+        }, []);
+        res.status(200).json(questions);
+      }
+      res.status(200).json(doc);
+    }
+  });
+});
+
 app.put("/api/questions/:id", function (req, res) {
   var updateDoc = req.body;
   delete updateDoc._id;
