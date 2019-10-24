@@ -17,7 +17,7 @@ export interface StepType {
 })
 export class WikiAbmComponent implements OnInit {
   public activedStep = 0;
-  public form;
+  public form: FormArray;
   public model: any = {};
   public addFlag = false;
   public options;
@@ -112,7 +112,7 @@ export class WikiAbmComponent implements OnInit {
                     },
                     validators: {
                       validation: Validators.compose([Validators.required,
-                        Validators.pattern('^[0-9]+$')])
+                      Validators.pattern('^[0-9]+$')])
                     }
                   },
                   {
@@ -122,11 +122,11 @@ export class WikiAbmComponent implements OnInit {
                       label: 'Operator',
                       placeholder: 'Operator',
                       options: [
-                        {symbol: '<'},
-                        {symbol: '<='},
-                        {symbol: '>'},
-                        {symbol: '>='},
-                        {symbol: '!='},
+                        { symbol: '<' },
+                        { symbol: '<=' },
+                        { symbol: '>' },
+                        { symbol: '>=' },
+                        { symbol: '!=' },
                       ],
                       valueProp: 'symbol',
                       labelProp: 'symbol',
@@ -152,7 +152,7 @@ export class WikiAbmComponent implements OnInit {
                     },
                     validators: {
                       validation: Validators.compose([Validators.required,
-                        Validators.pattern('^[0-9]+$')])
+                      Validators.pattern('^[0-9]+$')])
                     }
                   },
                   {
@@ -162,11 +162,11 @@ export class WikiAbmComponent implements OnInit {
                       label: 'Operator',
                       placeholder: 'Operator',
                       options: [
-                        {symbol: '<'},
-                        {symbol: '<='},
-                        {symbol: '>'},
-                        {symbol: '>='},
-                        {symbol: '!='},
+                        { symbol: '<' },
+                        { symbol: '<=' },
+                        { symbol: '>' },
+                        { symbol: '>=' },
+                        { symbol: '!=' },
                       ],
                       valueProp: 'symbol',
                       labelProp: 'symbol',
@@ -180,33 +180,106 @@ export class WikiAbmComponent implements OnInit {
         ]
       },
       {
-        label: 'Question',
+        label: 'Issue Type',
         fields: [
           {
             key: 'question',
-            type: 'radio',
-            templateOptions: {
-              label: 'Question Type',
-              placeholder: 'Question Type',
-              required: true,
-              options: [
-                { value: 1, label: 'Note' },
-                { value: 2, label: 'Question' },
-              ],
-            },
-            hooks: {
-              onInit: (field) => {
-                field.formControl.valueChanges.pipe(
-                  tap((value) => {
-                    if (value === 1) {
-                      field.type = 'input';
-                    } else {
-                      field.type = 'select';
-                    }
-                  }),
-                ).subscribe();
+            fieldGroup: [
+              {
+                key: 'action',
+                type: 'radio',
+                templateOptions: {
+                  label: 'Issue Type ',
+                  placeholder: 'Issue Type ',
+                  required: true,
+                  options: [
+                    { value: 1, label: 'Note' },
+                    { value: 2, label: 'Question' },
+                  ]
+                },
+                hooks: {
+                  onInit: (field) => {
+                    field.formControl.valueChanges.pipe(
+                      tap((value) => {
+                        let newField;
+                        if (value === 1) {
+                          newField = {
+                            key: 'note_description',
+                            type: 'input',
+                            templateOptions: {
+                              label: 'Note',
+                              placeholder: 'Type in here the text to display in the note',
+                            }
+                          };
+                        } else {
+                          newField = {
+                            key: 'question_type',
+                            type: 'radio',
+                            templateOptions: {
+                              label: 'Question Type',
+                              placeholder: 'Question Type',
+                              required: true,
+                              options: [
+                                { value: 1, label: 'Single Select' },
+                                { value: 2, label: 'Media Question' },
+                              ]
+                            },
+                            hooks : {
+                              onInit: (fieldSubQuestion) => {
+                                fieldSubQuestion.formControl.valueChanges.pipe(
+                                  tap((valueSubQuestion) => {
+                                    if (this.steps[1].fields[0].fieldGroup.length > 2) {
+                                      while (this.steps[1].fields[0].fieldGroup.length > 2) {
+                                        this.steps[1].fields[0].fieldGroup.pop();
+                                      }
+                                    }
+                                    if (valueSubQuestion === 2) {
+                                      this.steps[1].fields[0].fieldGroup.push({
+                                        key: 'title',
+                                        type: 'input',
+                                        templateOptions: {
+                                          label: 'Media Question',
+                                          placeholder: 'Type in here the text to display in the media question',
+                                        }
+                                      });
+                                    } else {
+                                      this.steps[1].fields[0].fieldGroup.push({
+                                        key: 'title',
+                                        type: 'input',
+                                        templateOptions: {
+                                          label: 'Question text',
+                                          placeholder: 'Type in here the text to display in the question',
+                                        }
+                                      });
+                                      this.steps[1].fields[0].fieldGroup.push({
+                                        key: 'title',
+                                        type: 'input',
+                                        templateOptions: {
+                                          label: 'Question text',
+                                          placeholder: 'Type in here the text to display in the question',
+                                        }
+                                      });
+                                    }
+                                    this.form = new FormArray(this.steps.map(() => new FormGroup({})));
+                                  }),
+                                ).subscribe();
+                              }
+                            }
+                          };
+                        }
+                        if (this.steps[1].fields[0].fieldGroup.length > 1) {
+                          while (this.steps[1].fields[0].fieldGroup.length > 1) {
+                            this.steps[1].fields[0].fieldGroup.pop();
+                          }
+                        }
+                        this.steps[1].fields[0].fieldGroup.push(newField);
+                        this.form = new FormArray(this.steps.map(() => new FormGroup({})));
+                      }),
+                    ).subscribe();
+                  }
+                }
               }
-            }
+            ]
           }
         ]
       },
@@ -225,7 +298,7 @@ export class WikiAbmComponent implements OnInit {
       }
     ];
     this.form = new FormArray(this.steps.map(() => new FormGroup({})));
-    this.options = this.steps.map(() => {});
+    this.options = this.steps.map(() => { });
   }
 
   cancelAdd(): void {
