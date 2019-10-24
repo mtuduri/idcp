@@ -1,0 +1,16 @@
+.app-grid-container{
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+    grid-template-areas:
+      "header"
+      "main";
+  }
+  .tal-widget-body {
+    grid-area: main;
+    height: calc(100vh - 60px);
+  }
+  .toolbar {
+    grid-area: header;
+    height: 60px;
+  }

@@ -1,0 +1,14 @@
+<button mat-mini-fab color="primary" (click)="this.addFlag = !this.addFlag" *ngIf="!this.addFlag">
+    <mat-icon>add</mat-icon>
+</button>
+<div class="form-container" *ngIf="this.addFlag">
+    <form [formGroup]="this.form">
+        <formly-form class="grid-formly" [model]="this.model" [fields]="this.fields" [options]="this.options"
+            [form]="this.form">
+        </formly-form>
+    </form>
+    <div>
+        <button mat-raised-button color="accent" (click)="this.cancelAdd()">Cancel</button>
+        <button class="save-button" mat-raised-button color="primary" (click)="this.addQuestion()">Save</button>
+    </div>
+</div>
