@@ -1,14 +1,22 @@
 <button mat-mini-fab color="primary" (click)="this.addFlag = !this.addFlag" *ngIf="!this.addFlag">
     <mat-icon>add</mat-icon>
 </button>
+<app-wiki-list [class.no-display]="this.addFlag"></app-wiki-list>
 <div class="form-container" *ngIf="this.addFlag">
-    <form [formGroup]="this.form">
-        <formly-form class="grid-formly" [model]="this.model" [fields]="this.fields" [options]="this.options"
-            [form]="this.form">
-        </formly-form>
+    <form [formGroup]="this.form" (ngSubmit)="this.addQuestion()">
+        <mat-horizontal-stepper [linear]="false" #matStepper>
+            <mat-step *ngFor="let step of steps; let index = index; let last = last;">
+                <ng-template matStepLabel>{{ step.label }}</ng-template>
+                <formly-form [form]="form.at(index)" [model]="model" [fields]="step.fields" [options]="options[index]">
+                </formly-form>
+                <div>
+                    <button *ngIf="index !== 0" mat-raised-button color="accent" type="button"
+                        (click)="prevStep(matStepper)">Back</button>
+                    <button *ngIf="!last" class="save-button" mat-raised-button color="primary" class="btn btn-primary" type="button"
+                        (click)="nextStep(matStepper)">Next</button>
+                    <button *ngIf="last" class="save-button" mat-raised-button color="primary" [disabled]="!form.valid" type="submit" color="primary">Save</button>
+                </div>
+            </mat-step>
+        </mat-horizontal-stepper>
     </form>
-    <div>
-        <button mat-raised-button color="accent" (click)="this.cancelAdd()">Cancel</button>
-        <button class="save-button" mat-raised-button color="primary" (click)="this.addQuestion()">Save</button>
-    </div>
 </div>
