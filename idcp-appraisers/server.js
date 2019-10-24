@@ -46,8 +46,8 @@ function handleError(res, reason, message, code) {
  *    POST: creates a new question
  */
 
-app.get("/api/questions", function(req, res) {
-  db.collection(QUESTIONS_COLLECTION).find({}).toArray(function(err, docs) {
+app.get("/api/questions", function (req, res) {
+  db.collection(QUESTIONS_COLLECTION).find({}).toArray(function (err, docs) {
     if (err) {
       handleError(res, err.message, "Failed to get questions.");
     } else {
@@ -56,21 +56,17 @@ app.get("/api/questions", function(req, res) {
   });
 });
 
-app.post("/api/questions", function(req, res) {
+app.post("/api/questions", function (req, res) {
   var newQuestion = req.body;
   newQuestion.createDate = new Date();
+  db.collection(QUESTIONS_COLLECTION).insertOne(newQuestion, function (err, doc) {
+    if (err) {
+      handleError(res, err.message, "Failed to create new question.");
+    } else {
+      res.status(201).json(doc.ops[0]);
+    }
+  });
 
-  if (!req.body.primary_question) {
-    handleError(res, "Invalid user input", "Must provide a primary question.", 400);
-  } else {
-    db.collection(QUESTIONS_COLLECTION).insertOne(newQuestion, function(err, doc) {
-      if (err) {
-        handleError(res, err.message, "Failed to create new question.");
-      } else {
-        res.status(201).json(doc.ops[0]);
-      }
-    });
-  }
 });
 
 /*  "/api/questions/:id"
@@ -79,8 +75,8 @@ app.post("/api/questions", function(req, res) {
  *    DELETE: deletes question by id
  */
 
-app.get("/api/questions/:id", function(req, res) {
-  db.collection(QUESTIONS_COLLECTION).findOne({ _id: new ObjectID(req.params.id) }, function(err, doc) {
+app.get("/api/questions/:id", function (req, res) {
+  db.collection(QUESTIONS_COLLECTION).findOne({_id: new ObjectID(req.params.id)}, function (err, doc) {
     if (err) {
       handleError(res, err.message, "Failed to get question");
     } else {
@@ -89,11 +85,11 @@ app.get("/api/questions/:id", function(req, res) {
   });
 });
 
-app.put("/api/questions/:id", function(req, res) {
+app.put("/api/questions/:id", function (req, res) {
   var updateDoc = req.body;
   delete updateDoc._id;
 
-  db.collection(QUESTIONS_COLLECTION).updateOne({_id: new ObjectID(req.params.id)}, updateDoc, function(err, doc) {
+  db.collection(QUESTIONS_COLLECTION).updateOne({_id: new ObjectID(req.params.id)}, updateDoc, function (err, doc) {
     if (err) {
       handleError(res, err.message, "Failed to update question");
     } else {
@@ -103,8 +99,8 @@ app.put("/api/questions/:id", function(req, res) {
   });
 });
 
-app.delete("/api/questions/:id", function(req, res) {
-  db.collection(QUESTIONS_COLLECTION).deleteOne({_id: new ObjectID(req.params.id)}, function(err, result) {
+app.delete("/api/questions/:id", function (req, res) {
+  db.collection(QUESTIONS_COLLECTION).deleteOne({_id: new ObjectID(req.params.id)}, function (err, result) {
     if (err) {
       handleError(res, err.message, "Failed to delete question");
     } else {
