@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { WikiListComponent } from './components/wiki-list/wiki-list.component';
 import { WikiAbmComponent } from './components/wiki-abm/wiki-abm.component';
+import { MatStepperModule } from '@angular/material/stepper';
 
 @NgModule({
   declarations: [WikiComponent, WikiListComponent, WikiAbmComponent],
@@ -20,6 +21,7 @@ import { WikiAbmComponent } from './components/wiki-abm/wiki-abm.component';
     FormsModule,
     ReactiveFormsModule,
     MyNgxFormlyModule,
+    MatStepperModule,
     RouterModule.forChild([{path: '', component: WikiComponent, children: [
       {path: '', component: WikiListComponent},
       {path: 'abm', component: WikiAbmComponent}
