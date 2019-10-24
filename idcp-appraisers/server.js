@@ -38,6 +38,7 @@ mongodb.MongoClient.connect(process.env.MONGODB_URI || "mongodb://localhost:2701
 // Generic error handler used by all endpoints.
 function handleError(res, reason, message, code) {
   console.log("ERROR: " + reason);
+  console.log(message);
   res.status(code || 500).json({"error": message});
 }
 
@@ -85,7 +86,7 @@ app.get("/api/questions/:id", function (req, res) {
   });
 });
 
-app.get("/api/dcp", function (req, res) {
+app.get("/api/dcp",async function (req, res) {
   const query = req.query;
   const miles = query.miles;
   const brand = query.brand;
@@ -94,46 +95,42 @@ app.get("/api/dcp", function (req, res) {
     handleError(res, "Invalid user input", "Must provide a brand and model.", 400);
   }
   var comparator_func = function (operator, val1, val2) {
-    try {
-      switch (operator) {
-        case "=":
-          return parseInt(val1, 10) === parseInt(val2, 10);
-        case "<":
-          return parseInt(val2, 10) < parseInt(val1, 10);
-        case "<=":
-          return parseInt(val2, 10) <= parseInt(val1, 10);
-        case ">":
-          return parseInt(val2, 10) > parseInt(val1, 10);
-        case ">=":
-          return parseInt(val2, 10) >= parseInt(val1, 10);
-        case "!=":
-          return parseInt(val1, 10) < parseInt(val2, 10);
-      }
-    }
-    catch (err) {
-      handleError(res, "comparator_func", err, 400);
+    switch (operator) {
+      case "=":
+        return parseInt(val1, 10) === parseInt(val2, 10);
+      case "<":
+        return parseInt(val2, 10) < parseInt(val1, 10);
+      case "<=":
+        return parseInt(val2, 10) <= parseInt(val1, 10);
+      case ">":
+        return parseInt(val2, 10) > parseInt(val1, 10);
+      case ">=":
+        return parseInt(val2, 10) >= parseInt(val1, 10);
+      case "!=":
+        return parseInt(val1, 10) < parseInt(val2, 10);
     }
   };
-  db.collection(QUESTIONS_COLLECTION).find({
-    "issue_conditions.brand": brand,
-    "issue_conditions.model": model
-  }).toArray(function (err, doc) {
-    if (err) {
-      handleError(res, err.message, "Failed to get question");
-    } else {
-      if (doc && Array.isArray(doc) && miles) {
-        var questions = doc.reduce(function (filtered, i) {
-          if (i.issue_conditions && i.issue_conditions.miles &&
-            comparator_func(i.issue_conditions.miles.operator, i.issue_conditions.miles.value, miles)) {
-            filtered.push(i.question);
-          }
-          return filtered;
-        }, []);
-        res.status(200).json(questions);
-      }
-      res.status(200).json(doc);
+  var result = await db.collection(QUESTIONS_COLLECTION)
+    .find({
+      "issue_conditions.brand": brand,
+      "issue_conditions.model": model
+    }).toArray();
+  if (result && Array.isArray(result) && miles) {
+    try {
+      var questions = result.reduce(function (filtered, i) {
+        if (i.issue_conditions && i.issue_conditions.miles && i.question &&
+          comparator_func(i.issue_conditions.miles.operator, i.issue_conditions.miles.value, miles)) {
+          filtered.push(i.question);
+        }
+        return filtered;
+      }, []);
+      res.status(200).json(questions);
     }
-  });
+    catch (err) {
+      handleError(res, err, "Failed to filter questions per mile");
+    }
+  }
+  res.status(200).json(result);
 });
 
 app.put("/api/questions/:id", function (req, res) {
