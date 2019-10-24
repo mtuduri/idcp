@@ -1,0 +1,34 @@
+<div class="container" *ngIf="questions$ | async as questions">
+
+    <table mat-table [dataSource]="questions" *ngIf="!this.addFlag">
+      <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef> Title </th>
+        <td mat-cell *matCellDef="let element"> {{element.issue_title}} </td>
+      </ng-container>
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef> Description </th>
+        <td mat-cell *matCellDef="let element"> {{element.issue_description}} </td>
+      </ng-container>
+      <ng-container matColumnDef="conditions">
+        <th mat-header-cell *matHeaderCellDef> Condition </th>
+        <td mat-cell *matCellDef="let element"> {{element.issue_conditions?.brand}}  {{element.issue_conditions?.model}} {{element.issue_conditions?.miles?.miles}}</td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+  </div>
+  <button mat-mini-fab color="primary" (click)="this.addFlag = !this.addFlag" *ngIf="!this.addFlag">
+    <mat-icon>add</mat-icon>
+  </button>
+  <div class="form-container" *ngIf="this.addFlag">
+    <form [formGroup]="this.form">
+      <formly-form class="grid-formly" [model]="this.model" [fields]="this.fields" [options]="this.options"
+        [form]="this.form">
+      </formly-form>
+    </form>
+    <div>
+      <button mat-raised-button color="accent" (click)="this.cancelAdd()">Cancel</button>
+      <button class="save-button" mat-raised-button color="primary" (click)="this.addQuestion()">Save</button>
+    </div>
+  </div>

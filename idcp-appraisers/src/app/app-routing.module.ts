@@ -2,7 +2,9 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 
-const routes: Routes = [];
+const routes: Routes = [
+  { path: 'wiki',  loadChildren: () => import('./modules/wiki/wiki.module').then(mod => mod.WikiModule)}
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
