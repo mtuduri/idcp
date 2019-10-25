@@ -14,6 +14,7 @@ export class WikiListComponent implements OnInit {
   constructor() {
     this.displayedColumns = ['title', 'description', 'brand', 'conditions'];
   }
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
 }
