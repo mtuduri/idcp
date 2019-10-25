@@ -10,9 +10,10 @@ import { MatTableModule } from '@angular/material/table';
 import { WikiListComponent } from './components/wiki-list/wiki-list.component';
 import { WikiAbmComponent } from './components/wiki-abm/wiki-abm.component';
 import { MatStepperModule } from '@angular/material/stepper';
+import { WikiManagerComponent } from './components/wiki-manager/wiki-manager.component';
 
 @NgModule({
-  declarations: [WikiComponent, WikiListComponent, WikiAbmComponent],
+  declarations: [WikiComponent, WikiListComponent, WikiAbmComponent, WikiManagerComponent],
   imports: [
     CommonModule,
     MatTableModule,
@@ -24,7 +25,7 @@ import { MatStepperModule } from '@angular/material/stepper';
     MatStepperModule,
     RouterModule.forChild([{path: '', component: WikiComponent, children: [
       {path: '', component: WikiListComponent},
-      {path: 'abm', component: WikiAbmComponent}
+      {path: 'abm', component: WikiManagerComponent}
     ]}])
   ]
 })

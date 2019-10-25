@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormlyFormOptions, FormlyFieldConfig, FormlyFormBuilder } from '@ngx-formly/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { FormlyFieldConfig, FormlyFormBuilder } from '@ngx-formly/core';
 import { FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { map, startWith, tap, first, flatMap, takeUntil } from 'rxjs/operators';
 import { CarInfoService } from 'src/app/shared/services/car-info.service';
@@ -22,19 +22,16 @@ export class WikiAbmComponent implements OnInit, OnDestroy {
   public activedStep = 0;
   public form: FormArray;
   public model: any = {};
-  public addFlag = false;
   public options;
   public fields: FormlyFieldConfig[] = [];
   public steps: StepType[];
-  public questions$: Observable<Issue[]>;
   private _destroy$: Subject<boolean> = new Subject<boolean>();
-  constructor(private builder: FormlyFormBuilder, private carInfoService: CarInfoService,
-              private questionService: QuestionService) {
+  @Output() public finishCreation: EventEmitter<boolean> = new EventEmitter();
+  constructor(private builder: FormlyFormBuilder, private carInfoService: CarInfoService) {
     this.builder.buildForm(this.form, this.fields, this.model, this.options);
   }
 
   public ngOnInit(): void {
-    this.getQuestions();
     this.setUpSteps();
   }
 
@@ -331,12 +328,9 @@ export class WikiAbmComponent implements OnInit, OnDestroy {
     this.options = this.steps.map(() => { });
   }
 
-  cancelAdd(): void {
-    this.addFlag = false;
-  }
-
   addQuestion() {
     console.log(this.model);
+    this.finishCreation.emit(true);
   }
 
   prevStep(stepper: MatStepper) {
@@ -377,9 +371,5 @@ export class WikiAbmComponent implements OnInit, OnDestroy {
     if (this.model && this.model.question && this.model.question.title) {
       this.model.question.title = null;
     }
-  }
-
-  private getQuestions(): void {
-    this.questions$ = this.questionService.getQuestions();
   }
 }
