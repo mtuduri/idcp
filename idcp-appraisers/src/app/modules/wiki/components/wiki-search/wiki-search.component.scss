@@ -1,0 +1,23 @@
+.form-search {
+    display: grid;
+    grid-template-columns: 1fr 40px 40px;
+    column-gap: 15px;
+    align-items: baseline;
+}
+
+.grid-formly-search {
+    display: flex;
+    flex-direction: row;   
+}
+
+::ng-deep .grid-formly-search .grid-formly-search-row {
+    margin-right: 10px;
+    width: 100%;
+}
+::ng-deep .grid-formly-search .grid-formly-search-row-shrink {
+    margin-right: 10px;
+}
+::ng-deep .grid-formly-search .grid-formly-search-row-shrink:last-child  {
+    margin-right: 0px;
+}
+

@@ -20,4 +20,7 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
+    <div *ngIf="questions.length === 0">
+        <span>No data to display</span>
+    </div>
 </div>

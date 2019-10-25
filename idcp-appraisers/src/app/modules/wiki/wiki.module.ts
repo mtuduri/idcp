@@ -13,9 +13,11 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { WikiManagerComponent } from './components/wiki-manager/wiki-manager.component';
 import { WikiLibraryComponent } from './components/wiki-library/wiki-library.component';
 import { WikiIframeComponent } from './components/wiki-iframe/wiki-iframe.component';
+import { WikiSearchComponent } from './components/wiki-search/wiki-search.component';
 
 @NgModule({
-  declarations: [WikiComponent, WikiListComponent, WikiAbmComponent, WikiManagerComponent, WikiLibraryComponent, WikiIframeComponent],
+  declarations: [WikiComponent, WikiListComponent, WikiAbmComponent, WikiManagerComponent,
+    WikiLibraryComponent, WikiIframeComponent, WikiSearchComponent],
   imports: [
     CommonModule,
     MatTableModule,
@@ -28,7 +30,8 @@ import { WikiIframeComponent } from './components/wiki-iframe/wiki-iframe.compon
     RouterModule.forChild([{path: '', component: WikiComponent, children: [
       {path: '', component: WikiLibraryComponent},
       {path: 'abm', component: WikiManagerComponent},
-      {path: 'iframe', component: WikiIframeComponent}
+      {path: 'iframe', component: WikiIframeComponent},
+      {path: 'search', component: WikiSearchComponent},
     ]}])
   ]
 })

@@ -7,6 +7,7 @@ import { configNgxFormly } from './my-ngx-formly.config';
 import { FormlyFieldButtonComponent } from './custom-field/button-type.component';
 import { RepeatTypeComponent } from './custom-field/repeat-section.component';
 import { MatButtonModule } from '@angular/material/button';
+import { FormlyMatToggleModule } from '@ngx-formly/material/toggle';
 
 @NgModule({
   declarations: [FormlyFieldButtonComponent, RepeatTypeComponent],
@@ -15,6 +16,7 @@ import { MatButtonModule } from '@angular/material/button';
     FormsModule,
     ReactiveFormsModule,
     MatButtonModule,
+    FormlyMatToggleModule,
     FormlyModule.forRoot(configNgxFormly),
     FormlyMaterialModule
   ],
