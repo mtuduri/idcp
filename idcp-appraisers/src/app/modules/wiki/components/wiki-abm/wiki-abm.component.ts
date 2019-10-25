@@ -4,7 +4,9 @@ import { FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { map, startWith, tap, first, flatMap, takeUntil } from 'rxjs/operators';
 import { CarInfoService } from 'src/app/shared/services/car-info.service';
 import { MatStepper } from '@angular/material/stepper';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
+import { QuestionService } from 'src/app/shared/services/question.service';
+import { Issue } from 'src/app/shared/models/issue';
 
 export interface StepType {
   label: string;
@@ -24,12 +26,15 @@ export class WikiAbmComponent implements OnInit, OnDestroy {
   public options;
   public fields: FormlyFieldConfig[] = [];
   public steps: StepType[];
+  public questions$: Observable<Issue[]>;
   private _destroy$: Subject<boolean> = new Subject<boolean>();
-  constructor(private builder: FormlyFormBuilder, private carInfoService: CarInfoService) {
+  constructor(private builder: FormlyFormBuilder, private carInfoService: CarInfoService,
+              private questionService: QuestionService) {
     this.builder.buildForm(this.form, this.fields, this.model, this.options);
   }
 
   public ngOnInit(): void {
+    this.getQuestions();
     this.setUpSteps();
   }
 
@@ -327,8 +332,6 @@ export class WikiAbmComponent implements OnInit, OnDestroy {
   }
 
   cancelAdd(): void {
-    this.model = {};
-    this.form.reset();
     this.addFlag = false;
   }
 
@@ -374,5 +377,9 @@ export class WikiAbmComponent implements OnInit, OnDestroy {
     if (this.model && this.model.question && this.model.question.title) {
       this.model.question.title = null;
     }
+  }
+
+  private getQuestions(): void {
+    this.questions$ = this.questionService.getQuestions();
   }
 }

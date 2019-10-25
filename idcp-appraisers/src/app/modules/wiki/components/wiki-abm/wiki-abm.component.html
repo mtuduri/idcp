@@ -1,7 +1,7 @@
 <button mat-mini-fab color="primary" (click)="this.addFlag = !this.addFlag" *ngIf="!this.addFlag">
     <mat-icon>add</mat-icon>
 </button>
-<app-wiki-list [class.no-display]="this.addFlag"></app-wiki-list>
+<app-wiki-list [class.no-display]="this.addFlag" [questions$]="this.questions$"></app-wiki-list>
 <div class="form-container" *ngIf="this.addFlag">
     <form [formGroup]="this.form">
         <mat-horizontal-stepper [linear]="false" #matStepper>
@@ -10,6 +10,8 @@
                 <formly-form class="grid-formly" [form]="form.at(index)" [model]="model" [fields]="step.fields" [options]="options[index]">
                 </formly-form>
                 <div>
+                    <button *ngIf="index === 0" mat-raised-button color="accent" type="button"
+                        (click)="cancelAdd()">Cancel</button>
                     <button *ngIf="index !== 0" mat-raised-button color="accent" type="button"
                         (click)="prevStep(matStepper)">Back</button>
                     <button *ngIf="!last" class="save-button" mat-raised-button color="primary" class="btn btn-primary" type="button"
