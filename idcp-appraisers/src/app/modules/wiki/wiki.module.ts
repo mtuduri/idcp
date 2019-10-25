@@ -10,9 +10,14 @@ import { MatTableModule } from '@angular/material/table';
 import { WikiListComponent } from './components/wiki-list/wiki-list.component';
 import { WikiAbmComponent } from './components/wiki-abm/wiki-abm.component';
 import { MatStepperModule } from '@angular/material/stepper';
+import { WikiManagerComponent } from './components/wiki-manager/wiki-manager.component';
+import { WikiLibraryComponent } from './components/wiki-library/wiki-library.component';
+import { WikiIframeComponent } from './components/wiki-iframe/wiki-iframe.component';
+import { WikiSearchComponent } from './components/wiki-search/wiki-search.component';
 
 @NgModule({
-  declarations: [WikiComponent, WikiListComponent, WikiAbmComponent],
+  declarations: [WikiComponent, WikiListComponent, WikiAbmComponent, WikiManagerComponent,
+    WikiLibraryComponent, WikiIframeComponent, WikiSearchComponent],
   imports: [
     CommonModule,
     MatTableModule,
@@ -23,8 +28,10 @@ import { MatStepperModule } from '@angular/material/stepper';
     MyNgxFormlyModule,
     MatStepperModule,
     RouterModule.forChild([{path: '', component: WikiComponent, children: [
-      {path: '', component: WikiListComponent},
-      {path: 'abm', component: WikiAbmComponent}
+      {path: '', component: WikiLibraryComponent},
+      {path: 'abm', component: WikiManagerComponent},
+      {path: 'iframe', component: WikiIframeComponent},
+      {path: 'search', component: WikiSearchComponent},
     ]}])
   ]
 })

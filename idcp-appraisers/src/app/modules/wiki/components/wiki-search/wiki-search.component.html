@@ -1,0 +1,16 @@
+<div class="wiki-search-container">
+    <div class="form-search">
+        <form [formGroup]="this.form">
+            <formly-form class="grid-formly-search" [model]="this.model" [fields]="this.fields" [options]="this.options"
+                [form]="this.form">
+            </formly-form>
+        </form>
+        <button mat-mini-fab color="accent" (click)="clean()">
+            <mat-icon>clear</mat-icon>
+        </button>
+        <button mat-mini-fab color="primary" (click)="search()">
+            <mat-icon>search</mat-icon>
+        </button>
+    </div>
+    <app-wiki-list [questions$]="this.questions$"></app-wiki-list>
+</div>

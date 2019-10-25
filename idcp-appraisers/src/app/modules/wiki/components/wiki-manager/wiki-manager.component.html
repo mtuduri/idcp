@@ -1,0 +1,8 @@
+<button mat-mini-fab color="primary" (click)="this.addFlag = !this.addFlag" *ngIf="!this.addFlag">
+        <mat-icon>add</mat-icon>
+</button>
+<button mat-mini-fab color="accent" (click)="this.addFlag = !this.addFlag" *ngIf="this.addFlag">
+        <mat-icon>remove</mat-icon>
+</button>
+<app-wiki-list [class.no-display]="this.addFlag" [questions$]="this.questions$"></app-wiki-list>
+<app-wiki-abm *ngIf="this.addFlag" (finishCreation)="this.onCreateQuestion()"></app-wiki-abm>

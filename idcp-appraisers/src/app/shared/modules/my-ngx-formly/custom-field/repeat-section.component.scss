@@ -1,0 +1,25 @@
+.repeat-seaction{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
+}
+.repeat-type-container > *, 
+.repeat-seaction > * {
+    margin-right: 10px;
+}
+.repeat-seaction > *:last-child {
+    margin-right: 0px;
+}
+.repeat-type-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
+}
+.repeat-type-container > * {
+    margin-top: 10px;
+}
+.repeat-type-container > *:last-child  {
+    margin-top: 0px;
+}
