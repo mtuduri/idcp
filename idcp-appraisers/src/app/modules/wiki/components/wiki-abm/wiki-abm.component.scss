@@ -18,3 +18,9 @@
 ::ng-deep .grid-formly .split-form > *:last-child {
     margin-right: 0px;
 }
+::ng-depp .grid-formly .mat-radio-label {
+    margin-right: 5px;
+}
+::ng-depp .grid-formly .mat-radio-label:last-child  {
+    margin-right: 0px;
+}
