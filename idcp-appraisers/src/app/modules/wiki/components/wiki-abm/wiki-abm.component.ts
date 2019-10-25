@@ -27,7 +27,8 @@ export class WikiAbmComponent implements OnInit, OnDestroy {
   public steps: StepType[];
   private _destroy$: Subject<boolean> = new Subject<boolean>();
   @Output() public finishCreation: EventEmitter<boolean> = new EventEmitter();
-  constructor(private builder: FormlyFormBuilder, private carInfoService: CarInfoService) {
+  constructor(private builder: FormlyFormBuilder, private carInfoService: CarInfoService,
+              private questionService: QuestionService) {
     this.builder.buildForm(this.form, this.fields, this.model, this.options);
   }
 
@@ -329,8 +330,48 @@ export class WikiAbmComponent implements OnInit, OnDestroy {
   }
 
   addQuestion() {
-    console.log(this.model);
-    this.finishCreation.emit(true);
+    if (this.form.valid) {
+      const modelNew = {... this.model};
+      if (this.model && this.model.question && this.model.question.action === 'Note') {
+        modelNew.issue_description += `. ${this.model.question.note_description}`;
+        modelNew.question = null;
+      } else if (this.model && this.model.question.action === 'Question') {
+        const question_type = this.model.question.question_type;
+        const primary_question =  this.model.question;
+        modelNew.question = null;
+        modelNew.question = {primary_question: primary_question};
+        modelNew.question.primary_question['key'] = this.model.issue_title.replace(/\s/gi, '_');
+        modelNew.question.primary_question['required'] = true;
+        modelNew.question.primary_question['well_known_issue'] = true;
+        modelNew.question['sub_questions'] = [];
+        modelNew.question['category'] = "vehicle";
+        modelNew.question.primary_question['title_short'] = 'Created by Appraisers';
+        if (question_type === 'media') {
+          modelNew.question.primary_question['type'] = 'media';
+          modelNew.question.primary_question['validation_rule'] = `
+          function (response, services) {
+            return services.CustomValidationServices.validateMedia(response, '${this.model.question.title}'); }`;
+          modelNew.question.primary_question['max_length'] = 500;
+          modelNew.question.primary_question['ar_pictures'] = `
+          function (services, context, questionKey) { return services.UtilServices.arrayOfPictures(context, questionKey); }`;
+
+        } else if (question_type === 'single_select') {
+          modelNew.question.primary_question['validation_rule'] = `
+            function (response, services) {
+              return services.CustomValidationServices.validateSingleSelect(response, '${this.model.question.title}');
+            }`;
+          modelNew.question.primary_question['type'] = 'single_select';
+        }
+      }
+      this.questionService.postQuestion(modelNew).pipe(first()).subscribe(
+        () => {
+          this.finishCreation.emit(true);
+        },
+        (error) => {
+          console.log('error');
+        }
+      );
+    }
   }
 
   prevStep(stepper: MatStepper) {
