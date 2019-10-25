@@ -14,4 +14,7 @@ export class QuestionService {
   getQuestions(): Observable<Issue[]> {
     return this.http.get<Issue[]>(`${environment.api.url}/questions`);
   }
+  postQuestion(model: any): Observable<any> {
+    return this.http.post<any>(`${environment.api.url}/questions`, model);
+  }
 }
