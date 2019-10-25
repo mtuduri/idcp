@@ -113,10 +113,9 @@ export class WikiAbmComponent implements OnInit, OnDestroy {
                 fieldGroup: [
                   {
                     type: 'input',
-                    key: 'year',
+                    key: 'value',
                     templateOptions: {
                       label: 'Year',
-                      type: 'number',
                       placeholder: 'Year',
                       required: true,
                       min: 0
@@ -156,7 +155,6 @@ export class WikiAbmComponent implements OnInit, OnDestroy {
                     key: 'value',
                     templateOptions: {
                       label: 'Miles',
-                      type: 'number',
                       placeholder: 'Miles',
                       required: true,
                       min: 0
